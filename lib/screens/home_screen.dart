@@ -73,9 +73,10 @@ class _HomeScreenState extends State<HomeScreen> {
     });
 
     try {
-      final url = _currentSearch.isEmpty
-          ? 'http://0.0.0.0:8000/api/v1/movies/?page=$_currentPage'
-          : 'http://0.0.0.0:8000/api/v1/movies/?page=$_currentPage&search=$_currentSearch';
+      final url =
+          _currentSearch.isEmpty
+              ? 'http://0.0.0.0:8000/api/v1/movies/?page=$_currentPage'
+              : 'http://0.0.0.0:8000/api/v1/movies/?page=$_currentPage&search=$_currentSearch';
 
       final response = await http
           .get(Uri.parse(url))
@@ -120,9 +121,10 @@ class _HomeScreenState extends State<HomeScreen> {
         _movies.clear();
       });
 
-      final url = _currentSearch.isEmpty
-          ? 'http://0.0.0.0:8000/api/v1/movies/'
-          : 'http://0.0.0.0:8000/api/v1/movies/?search=$_currentSearch';
+      final url =
+          _currentSearch.isEmpty
+              ? 'http://0.0.0.0:8000/api/v1/movies/'
+              : 'http://0.0.0.0:8000/api/v1/movies/?search=$_currentSearch';
 
       print('Attempting to connect to: $url');
 
@@ -204,164 +206,179 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
                 filled: true,
                 fillColor: Colors.grey[200],
-                suffixIcon: _searchController.text.isNotEmpty
-                    ? IconButton(
-                        icon: const Icon(Icons.clear),
-                        onPressed: () {
-                          _searchController.clear();
-                          _onSearchChanged('');
-                        },
-                      )
-                    : null,
+                suffixIcon:
+                    _searchController.text.isNotEmpty
+                        ? IconButton(
+                          icon: const Icon(Icons.clear),
+                          onPressed: () {
+                            _searchController.clear();
+                            _onSearchChanged('');
+                          },
+                        )
+                        : null,
               ),
               onChanged: _onSearchChanged,
             ),
           ),
           Expanded(
-            child: _isLoading
-                ? const Center(child: CircularProgressIndicator())
-                : _error.isNotEmpty
+            child:
+                _isLoading
+                    ? const Center(child: CircularProgressIndicator())
+                    : _error.isNotEmpty
                     ? Center(
-                        child: Padding(
-                          padding: const EdgeInsets.all(16.0),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                _error,
-                                textAlign: TextAlign.center,
-                                style: const TextStyle(color: Colors.red),
-                              ),
-                              const SizedBox(height: 16),
-                              ElevatedButton(
-                                onPressed: _fetchMovies,
-                                child: const Text('Retry'),
-                              ),
-                            ],
-                          ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              _error,
+                              textAlign: TextAlign.center,
+                              style: const TextStyle(color: Colors.red),
+                            ),
+                            const SizedBox(height: 16),
+                            ElevatedButton(
+                              onPressed: _fetchMovies,
+                              child: const Text('Retry'),
+                            ),
+                          ],
                         ),
-                      )
+                      ),
+                    )
                     : _movies.isEmpty
-                        ? Center(
-                            child: Text(
-                              _currentSearch.isEmpty
-                                  ? 'No movies found'
-                                  : 'No movies found for "$_currentSearch"',
-                              style: const TextStyle(fontSize: 16),
-                            ),
-                          )
-                        : GridView.builder(
-                            controller: _scrollController,
-                            padding: const EdgeInsets.all(16),
-                            gridDelegate:
-                                const SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 2,
-                              childAspectRatio: 0.65,
-                              crossAxisSpacing: 16,
-                              mainAxisSpacing: 16,
-                            ),
-                            itemCount: _movies.length + (_hasMorePages ? 1 : 0),
-                            itemBuilder: (context, index) {
-                              if (index == _movies.length) {
-                                return const Center(
-                                  child: Padding(
-                                    padding: EdgeInsets.all(16.0),
-                                    child: CircularProgressIndicator(),
-                                  ),
-                                );
-                              }
+                    ? Center(
+                      child: Text(
+                        _currentSearch.isEmpty
+                            ? 'No movies found'
+                            : 'No movies found for "$_currentSearch"',
+                        style: const TextStyle(fontSize: 16),
+                      ),
+                    )
+                    : GridView.builder(
+                      controller: _scrollController,
+                      padding: const EdgeInsets.all(16),
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 2,
+                            childAspectRatio: 0.65,
+                            crossAxisSpacing: 16,
+                            mainAxisSpacing: 16,
+                          ),
+                      itemCount: _movies.length + (_hasMorePages ? 1 : 0),
+                      itemBuilder: (context, index) {
+                        if (index == _movies.length) {
+                          return Container(
+                            height: 100,
+                            alignment: Alignment.center,
+                            child: const CircularProgressIndicator(),
+                          );
+                        }
 
-                              final movie = _movies[index];
-                              return GestureDetector(
-                                onTap: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => MovieDetailsScreen(
-                                        movie: movie,
+                        final movie = _movies[index];
+                        return GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder:
+                                    (context) =>
+                                        MovieDetailsScreen(movie: movie),
+                              ),
+                            );
+                          },
+                          child: Card(
+                            elevation: 4,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Expanded(
+                                  flex: 3,
+                                  child: ClipRRect(
+                                    borderRadius: const BorderRadius.vertical(
+                                      top: Radius.circular(10),
+                                    ),
+                                    child: Hero(
+                                      tag: 'movie_poster_${movie.id}',
+                                      child: Image.network(
+                                        'https://image.tmdb.org/t/p/w500${movie.posterPath}',
+                                        fit: BoxFit.cover,
+                                        width: double.infinity,
+                                        errorBuilder: (
+                                          context,
+                                          error,
+                                          stackTrace,
+                                        ) {
+                                          return const Center(
+                                            child: Icon(Icons.error),
+                                          );
+                                        },
                                       ),
                                     ),
-                                  );
-                                },
-                                child: Card(
-                                  elevation: 4,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(10),
-                                  ),
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      Expanded(
-                                        flex: 3,
-                                        child: ClipRRect(
-                                          borderRadius: const BorderRadius.vertical(
-                                            top: Radius.circular(10),
-                                          ),
-                                          child: Hero(
-                                            tag: 'movie_poster_${movie.id}',
-                                            child: Image.network(
-                                              'https://image.tmdb.org/t/p/w500${movie.posterPath}',
-                                              fit: BoxFit.cover,
-                                              width: double.infinity,
-                                              errorBuilder: (context, error, stackTrace) {
-                                                return const Center(
-                                                  child: Icon(Icons.error),
-                                                );
-                                              },
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                      Expanded(
-                                        flex: 2,
-                                        child: SingleChildScrollView(
-                                          child: Padding(
-                                            padding: const EdgeInsets.all(8.0),
-                                            child: Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                Text(
-                                                  movie.title,
-                                                  style: const TextStyle(
-                                                    fontSize: 16,
-                                                    fontWeight: FontWeight.bold,
-                                                  ),
-                                                  maxLines: 2,
-                                                  overflow: TextOverflow.ellipsis,
-                                                ),
-                                                const SizedBox(height: 4),
-                                                Text(
-                                                  'Rating: ${movie.voteAverage}',
-                                                  style: const TextStyle(fontSize: 12),
-                                                ),
-                                                Text(
-                                                  'Runtime: ${movie.runtime} min',
-                                                  style: const TextStyle(fontSize: 12),
-                                                ),
-                                                Text(
-                                                  'Release: ${movie.releaseDate}',
-                                                  style: const TextStyle(fontSize: 12),
-                                                ),
-                                                Text(
-                                                  'Adult: ${movie.adult ? "Yes" : "No"}',
-                                                  style: const TextStyle(fontSize: 12),
-                                                ),
-                                                Text(
-                                                  'Popularity: ${movie.popularity}',
-                                                  style: const TextStyle(fontSize: 12),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ],
                                   ),
                                 ),
-                              );
-                            },
+                                Expanded(
+                                  flex: 2,
+                                  child: SingleChildScrollView(
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            movie.title,
+                                            style: const TextStyle(
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                            maxLines: 2,
+                                            overflow: TextOverflow.ellipsis,
+                                          ),
+                                          const SizedBox(height: 4),
+                                          Text(
+                                            'Rating: ${movie.voteAverage}',
+                                            style: const TextStyle(
+                                              fontSize: 12,
+                                            ),
+                                          ),
+                                          Text(
+                                            'Year: ${movie.year}',
+                                            style: const TextStyle(
+                                              fontSize: 12,
+                                            ),
+                                          ),
+                                          Text(
+                                            'Release: ${movie.releaseDate ?? 'N/A'}',
+                                            style: const TextStyle(
+                                              fontSize: 12,
+                                            ),
+                                          ),
+                                          Text(
+                                            'Adult: ${movie.adult ? "Yes" : "No"}',
+                                            style: const TextStyle(
+                                              fontSize: 12,
+                                            ),
+                                          ),
+                                          Text(
+                                            'Popularity: ${movie.popularity}',
+                                            style: const TextStyle(
+                                              fontSize: 12,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
+                        );
+                      },
+                    ),
           ),
         ],
       ),

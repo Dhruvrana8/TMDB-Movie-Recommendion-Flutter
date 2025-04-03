@@ -1,112 +1,76 @@
 class Movie {
   final int id;
   final String title;
+  final String genre;
+  final String? releaseDate;
+  final double popularity;
   final double voteAverage;
   final int voteCount;
-  final String status;
-  final int revenue;
-  final String backdropPath;
-  final int budget;
-  final String homepage;
-  final String imdbId;
-  final String originalLanguage;
-  final String originalTitle;
-  final String overview;
-  final double popularity;
-  final String posterPath;
-  final String releaseDate;
-  final String tagline;
-  final String genres;
-  final String productionCompanies;
-  final String productionCountries;
-  final String spokenLanguages;
-  final String keywords;
-  final int runtime;
+  final String? backdropPath;
+  final String? posterPath;
   final bool adult;
+  final String overview;
+  final int year;
+  final String type;
+  final String cast;
+  final String character;
+  final String director;
 
   Movie({
     required this.id,
     required this.title,
+    required this.genre,
+    this.releaseDate,
+    required this.popularity,
     required this.voteAverage,
     required this.voteCount,
-    required this.status,
-    required this.revenue,
-    required this.backdropPath,
-    required this.budget,
-    required this.homepage,
-    required this.imdbId,
-    required this.originalLanguage,
-    required this.originalTitle,
-    required this.overview,
-    required this.popularity,
-    required this.posterPath,
-    required this.releaseDate,
-    required this.tagline,
-    required this.genres,
-    required this.productionCompanies,
-    required this.productionCountries,
-    required this.spokenLanguages,
-    required this.keywords,
-    required this.runtime,
+    this.backdropPath,
+    this.posterPath,
     required this.adult,
+    required this.overview,
+    required this.year,
+    required this.type,
+    required this.cast,
+    required this.character,
+    required this.director,
   });
 
   factory Movie.fromJson(Map<String, dynamic> json) {
     return Movie(
       id: json['id'] ?? 0,
       title: json['title'] ?? '',
-      voteAverage: double.tryParse(json['vote_average']?.toString() ?? '0.0') ?? 0.0,
+      genre: json['genre'] ?? '',
+      releaseDate: json['release_date'],
+      popularity: (json['popularity'] ?? 0.0).toDouble(),
+      voteAverage: (json['vote_average'] ?? 0.0).toDouble(),
       voteCount: json['vote_count'] ?? 0,
-      status: json['status'] ?? '',
-      revenue: int.tryParse(json['revenue']?.toString() ?? '0') ?? 0,
-      backdropPath: json['backdrop_path'] ?? '',
-      budget: int.tryParse(json['budget']?.toString() ?? '0') ?? 0,
-      homepage: json['homepage'] ?? '',
-      imdbId: json['imdb_id'] ?? '',
-      originalLanguage: json['original_language'] ?? '',
-      originalTitle: json['original_title'] ?? '',
-      overview: json['overview'] ?? '',
-      popularity: double.tryParse(json['popularity']?.toString() ?? '0.0') ?? 0.0,
-      posterPath: json['poster_path'] ?? '',
-      releaseDate: json['release_date'] ?? '',
-      tagline: json['tagline'] ?? '',
-      genres: json['genres'] ?? '',
-      productionCompanies: json['production_companies'] ?? '',
-      productionCountries: json['production_countries'] ?? '',
-      spokenLanguages: json['spoken_languages'] ?? '',
-      keywords: json['keywords'] ?? '',
-      runtime: json['runtime'] ?? 0,
+      backdropPath: json['backdrop_path'],
+      posterPath: json['poster_path'],
       adult: json['adult'] ?? false,
+      overview: json['overview'] ?? '',
+      year: json['year'] ?? 0,
+      type: json['type'] ?? '',
+      cast: json['cast'] ?? '',
+      character: json['character'] ?? '',
+      director: json['director'] ?? '',
     );
   }
 
   // Helper method to get genres as a list
   List<String> get genresList {
-    if (genres.isEmpty) return [];
-    return genres.split(',').map((e) => e.trim()).toList();
+    if (genre.isEmpty) return [];
+    return genre.split(',').map((e) => e.trim()).toList();
   }
 
-  // Helper method to get production companies as a list
-  List<String> get productionCompaniesList {
-    if (productionCompanies.isEmpty) return [];
-    return productionCompanies.split(',').map((e) => e.trim()).toList();
+  // Helper method to get cast as a list
+  List<String> get castList {
+    if (cast.isEmpty) return [];
+    return cast.split(',').map((e) => e.trim()).toList();
   }
 
-  // Helper method to get production countries as a list
-  List<String> get productionCountriesList {
-    if (productionCountries.isEmpty) return [];
-    return productionCountries.split(',').map((e) => e.trim()).toList();
-  }
-
-  // Helper method to get spoken languages as a list
-  List<String> get spokenLanguagesList {
-    if (spokenLanguages.isEmpty) return [];
-    return spokenLanguages.split(',').map((e) => e.trim()).toList();
-  }
-
-  // Helper method to get keywords as a list
-  List<String> get keywordsList {
-    if (keywords.isEmpty) return [];
-    return keywords.split(',').map((e) => e.trim()).toList();
+  // Helper method to get characters as a list
+  List<String> get characterList {
+    if (character.isEmpty) return [];
+    return character.split(',').map((e) => e.trim()).toList();
   }
 } 
